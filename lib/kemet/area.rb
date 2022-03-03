@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Kemet
+  # Represents an area in the board
   class Area
     attr_reader :id
 

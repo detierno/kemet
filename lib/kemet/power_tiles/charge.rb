@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 module Kemet
   module PowerTiles
     class Charge
-      name 'Charge!'
+      name "Charge!"
       level 1
-      description 'In Battle, when you are the attacker, your Troops gain +1 Strength.'
+      description "In Battle, when you are the attacker, your Troops gain +1 Strength."
       phase :day
       color :red
 
-      attack_modifier '+1'
+      attack_modifier "+1"
 
-      condition 'attacking'
+      condition "attacking"
     end
   end
 end

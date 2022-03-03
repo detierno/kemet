@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Kemet
   module Areas
-    class District < Area
+    class District < Area # :nodoc:
       def allow_piramid?
         true
       end

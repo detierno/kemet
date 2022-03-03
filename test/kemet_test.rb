@@ -9,8 +9,8 @@ class KemetTest < Minitest::Test
 
   def test_a_full_match
     match = Kemet::Match.new
-    red_player = match.add_player(:red)
-    green_player = match.add_player(:green)
+    _red_player = match.add_player(:red)
+    _green_player = match.add_player(:green)
 
     # match.setup!
   end

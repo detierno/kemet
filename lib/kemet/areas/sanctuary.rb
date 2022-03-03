@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 module Kemet
   module Areas
-    class Sanctuary < Area
+    class Sanctuary < Area # :nodoc:
       def initialize(id, options)
         @id = id
         @options = options
+
+        super
       end
 
       def obelysk?
