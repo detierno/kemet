@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'psych'
+# Psych.load(File.open(File.expand_path('lib/kemet/templates/boards/two_players.yml')))
 
 module Kemet
   # Generate board instances for a match
@@ -18,6 +20,39 @@ module Kemet
         setup_deserts
         setup_sanctuaries
         areas.flatten!
+
+        link_board
+      end
+
+      def link_board
+        link_deserts
+        link_districts
+        link_sanctuaries
+      end
+
+      def link_areas(id, *link_ids)
+        area = areas.find { |area| area.id == id }
+        targets = areas.select { |area| link_ids.include?(area.id) }
+        area.link_areas(targets)
+      end
+
+      def link_deserts
+        link_areas(:t2, :s1, :t1, :t4)
+      end
+
+      def link_districts
+        link_areas(:d1, :d2, :d3, :t1)
+        link_areas(:d2, :d1, :d3, :t1)
+        link_areas(:d3, :d1, :d2, :t1)
+
+        link_areas(:d4, :d5, :d6, :t4)
+        link_areas(:d5, :d4, :d6, :t4)
+        link_areas(:d6, :d4, :d5, :t4)
+      end
+
+      def link_sanctuaries
+        link_areas(:s1, :t1, :t2, :t4)
+        link_areas(:s2, :t3)
       end
 
       def setup_sanctuaries
@@ -44,9 +79,6 @@ module Kemet
         district4 = Areas::District.new(:d4)
         district5 = Areas::District.new(:d5)
         district6 = Areas::District.new(:d6)
-        # district1.link_areas(district2, district3, desert1)
-        # district2.link_areas(district1, district3, desert1)
-        # district3.link_areas(district1, district2, desert1)
 
         areas << [district1, district2, district3, district4, district5, district6]
       end
