@@ -31,6 +31,10 @@ module Kemet
       district5 = Areas::District.new(:d5)
       district6 = Areas::District.new(:d6)
 
+      district1.link_areas(district2, district3, desert1)
+      district2.link_areas(district1, district3, desert1)
+      district3.link_areas(district1, district2, desert1)
+
 
       areas << [district1, district2, district3, district4, district5, district6]
       areas << [desert1, desert2, desert3, desert4]
