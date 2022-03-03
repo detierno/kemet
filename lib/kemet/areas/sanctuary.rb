@@ -4,10 +4,9 @@ module Kemet
   module Areas
     class Sanctuary < Area # :nodoc:
       def initialize(id, options)
-        @id = id
         @options = options
 
-        super
+        super(id)
       end
 
       def obelysk?

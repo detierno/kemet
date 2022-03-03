@@ -4,10 +4,9 @@ module Kemet
   module Areas
     class Desert < Area  # :nodoc:
       def initialize(id, obelysk: false)
-        @id = id
         @obelysk = obelysk
 
-        super
+        super(id)
       end
 
       def obelysk?
