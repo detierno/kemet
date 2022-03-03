@@ -7,7 +7,11 @@ class KemetTest < Minitest::Test
     refute_nil ::Kemet::VERSION
   end
 
-  def test_it_does_something_useful
-    assert false
+  def test_a_full_match
+    match = Kemet::Match.new
+    red_player = match.add_player(:red)
+    green_player = match.add_player(:green)
+
+    # match.setup!
   end
 end
