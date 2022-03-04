@@ -10,6 +10,7 @@ gem "rake", "~> 13.0"
 gem "minitest", "~> 5.0"
 
 gem "psych"
+gem "zeitwerk"
 
 group :development do
   gem "color_pound_spec_reporter"

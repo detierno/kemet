@@ -79,6 +79,7 @@ GEM
     stringio (3.0.1)
     thor (1.2.1)
     unicode-display_width (2.1.0)
+    zeitwerk (2.5.4)
 
 PLATFORMS
   x86_64-darwin-20
@@ -95,6 +96,7 @@ DEPENDENCIES
   rake (~> 13.0)
   rubocop (~> 1.7)
   rubocop-minitest
+  zeitwerk
 
 BUNDLED WITH
    2.3.6
