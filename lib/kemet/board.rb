@@ -1,86 +1,62 @@
 # frozen_string_literal: true
-require 'psych'
-# Psych.load(File.open(File.expand_path('lib/kemet/templates/boards/two_players.yml')))
+
+require "psych"
 
 module Kemet
-  # Generate board instances for a match
+  # Generate board instances for a match based on map templates
   class Board
+    attr_reader :players
+
     def initialize(players)
       @players = players
       setup
     end
 
     def areas
-      @areas ||= []
+      @areas ||= Set.new
     end
 
     private
-      def setup
-        setup_districts
-        setup_deserts
-        setup_sanctuaries
-        areas.flatten!
-
-        link_board
+      def build_area(entry)
+        case entry["type"]
+        when "sanctuary"
+          Areas::Sanctuary.new(entry["id"].to_sym, prayer_points: entry["prayer_points"])
+        when "district"
+          Areas::District.new(entry["id"].to_sym)
+        when "desert"
+          Areas::Desert.new(entry["id"].to_sym, obelysk: entry["obelysk"])
+        end
       end
 
       def link_board
-        link_deserts
-        link_districts
-        link_sanctuaries
+        template.each do |entry|
+          area = areas.find { |a| a.id.to_s == entry["id"] }
+          targets = areas.select { |a| entry["links"].include?(a.id.to_s) }
+
+          area.link_areas(*targets)
+        end
       end
 
-      def link_areas(id, *link_ids)
-        area = areas.find { |area| area.id == id }
-        targets = areas.select { |area| link_ids.include?(area.id) }
-        area.link_areas(targets)
+      def setup
+        setup_areas
+        link_board
       end
 
-      def link_deserts
-        link_areas(:t2, :s1, :t1, :t4)
+      def setup_areas
+        template.each do |entry|
+          area = build_area(entry)
+          areas.add(area)
+        end
       end
 
-      def link_districts
-        link_areas(:d1, :d2, :d3, :t1)
-        link_areas(:d2, :d1, :d3, :t1)
-        link_areas(:d3, :d1, :d2, :t1)
-
-        link_areas(:d4, :d5, :d6, :t4)
-        link_areas(:d5, :d4, :d6, :t4)
-        link_areas(:d6, :d4, :d5, :t4)
+      def template
+        @template ||= Psych.safe_load(File.open(File.expand_path("lib/kemet/templates/boards/#{template_file}.yml")))
       end
 
-      def link_sanctuaries
-        link_areas(:s1, :t1, :t2, :t4)
-        link_areas(:s2, :t3)
-      end
-
-      def setup_sanctuaries
-        sanctuary1 = Areas::Sanctuary.new(:s1, prayer_points: 2)
-        sanctuary2 = Areas::Sanctuary.new(:s2, prayer_points: 3)
-        sanctuary3 = Areas::Sanctuary.new(:s3, prayer_points: 5)
-
-        areas << [sanctuary1, sanctuary2, sanctuary3]
-      end
-
-      def setup_deserts
-        desert1 = Areas::Desert.new(:t1)
-        desert2 = Areas::Desert.new(:t2, obelysk: true)
-        desert3 = Areas::Desert.new(:t3)
-        desert4 = Areas::Desert.new(:t4)
-
-        areas << [desert1, desert2, desert3, desert4]
-      end
-
-      def setup_districts
-        district1 = Areas::District.new(:d1)
-        district2 = Areas::District.new(:d2)
-        district3 = Areas::District.new(:d3)
-        district4 = Areas::District.new(:d4)
-        district5 = Areas::District.new(:d5)
-        district6 = Areas::District.new(:d6)
-
-        areas << [district1, district2, district3, district4, district5, district6]
+      def template_file
+        case players.count
+        when 2 then "two_players"
+        end
       end
   end
 end

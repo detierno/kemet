@@ -1,0 +1,57 @@
+---
+-
+  id: 'd1'
+  type: 'district'
+  links: ['d2', 'd3', 't1']
+- 
+  id: 'd2'
+  type: 'district'
+  links: ['d1', 'd3', 't1']
+- 
+  id: 'd3'
+  type: 'district'
+  links: ['d1', 'd2', 't1']
+- 
+  id: 'd4'
+  type: 'district'
+  links: ['d5', 'd6', 't4']
+- 
+  id: 'd5'
+  type: 'district'
+  links: ['d4', 'd6', 't4']
+- 
+  id: 'd6'
+  type: 'district'
+  links: ['d4', 'd5', 't4']
+- 
+  id: 's1'
+  type: 'sanctuary'
+  prayer_points: 2
+  links: ['t1', 't2', 't4']
+- 
+  id: 's2'
+  type: 'sanctuary'
+  prayer_points: 3
+  links: ['t3']
+- 
+  id: 's3'
+  type: 'sanctuary'
+  prayer_points: 5
+  links: []
+- 
+  id: 't1'
+  type: 'desert'
+  links: ['d1', 'd2', 'd3', 't2', 't3']
+- 
+  id: 't2'
+  type: 'desert'
+  obelysk: true
+  links: ['s1', 't1', 't3', 't4']
+- 
+  id: 't3'
+  type: 'desert'
+  links: ['s2', 't1', 't2', 't4']
+- 
+  id: 't4'
+  type: 'desert'
+  links: ['d4', 'd5', 'd6', 't2', 't3']

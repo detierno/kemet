@@ -230,5 +230,8 @@ Style/ColonMethodCall:
 Style/TrivialAccessors:
   Enabled: true
 
+Metrics/BlockLength:
+  IgnoredMethods: ['describe']
+
 Minitest/UnreachableAssertion:
   Enabled: true
