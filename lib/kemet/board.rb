@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "psych"
+require "set"
 
 module Kemet
   # Generate board instances for a match based on map templates
@@ -13,7 +14,7 @@ module Kemet
     end
 
     def areas
-      @areas ||= ::Set.new
+      @areas ||= Set.new
     end
 
     private
