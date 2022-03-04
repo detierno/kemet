@@ -2,7 +2,7 @@
 
 module Kemet
   module Decks
-    class PowerTile # :nodoc:
+    class BattleCard # :nodoc:
     end
   end
 end

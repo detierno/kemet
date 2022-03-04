@@ -15,13 +15,13 @@ module Kemet
         @cards = load_cards
       end
 
-      def load_cards
-        card_list.each_with_object([]) do |card, ary|
-          card["quantity"].times { ary << Object.const_get("Kemet::DivineInterventions::#{card["name"]}").new }
-        end
-      end
-
       private
+        def load_cards
+          card_list.each_with_object([]) do |card, ary|
+            card["quantity"].times { ary << Object.const_get("Kemet::DivineInterventions::#{card["name"]}").new }
+          end
+        end
+
         def card_list
           Psych.safe_load(File.open(File.expand_path("lib/kemet/templates/divine_intervention.yml")))
         end
