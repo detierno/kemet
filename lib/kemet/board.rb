@@ -13,7 +13,7 @@ module Kemet
     end
 
     def areas
-      @areas ||= Set.new
+      @areas ||= ::Set.new
     end
 
     private
