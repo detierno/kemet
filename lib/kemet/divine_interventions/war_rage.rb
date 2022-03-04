@@ -2,7 +2,7 @@
 
 module Kemet
   module DivineInterventions
-    class WarRage
+    class WarRage # :nodoc:
       def cost
         0
       end

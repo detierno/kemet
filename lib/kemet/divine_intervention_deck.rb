@@ -3,11 +3,10 @@
 require "psych"
 
 module Kemet
-  class DivineInterventionDeck
+  class DivineInterventionDeck # :nodoc:
     def self.cards
-      card_list.inject([]) do |ary, card|
-        card['quantity'].times { ary << Object.const_get("Kemet::DivineInterventions::#{card['name']}").new }
-        ary
+      card_list.each_with_object([]) do |card, ary|
+        card["quantity"].times { ary << Object.const_get("Kemet::DivineInterventions::#{card["name"]}").new }
       end
     end
 

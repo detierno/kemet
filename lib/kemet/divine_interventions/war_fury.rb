@@ -2,7 +2,7 @@
 
 module Kemet
   module DivineInterventions
-    class WarFury
+    class WarFury # :nodoc:
       def cost
         1
       end
