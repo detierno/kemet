@@ -19,5 +19,14 @@ module Kemet
 
       assert_raises(AlreadyChosenColorError) { @match.add_player(:red) }
     end
+
+    def test_setup_generate_di_deck
+      @match.add_player(:red)
+      @match.add_player(:blue)
+      @match.setup!
+
+      # assert_equal 35, @match.di_deck.size # real size
+      assert_equal 6, @match.di_deck.size
+    end
   end
 end
