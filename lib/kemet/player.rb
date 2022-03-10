@@ -11,5 +11,9 @@ module Kemet
       @player_board = PlayerBoard.new
       @prayer_points = 0
     end
+
+    def receive_event(event)
+      p "Event received: #{inspect} #{event.inspect}"
+    end
   end
 end
