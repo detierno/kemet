@@ -9,7 +9,7 @@ describe Kemet do
       _red_player = match.add_player(:red)
       _green_player = match.add_player(:green)
 
-      # match.setup!
+      match.setup!
     end
   end
 end
