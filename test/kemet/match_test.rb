@@ -5,7 +5,7 @@ require "test_helper"
 module Kemet
   class MatchTest < Minitest::Test
     def setup
-      @match = Kemet::Match.new
+      @match = Kemet::Match.new(logger: Logger.new(nil))
     end
 
     def test_add_player

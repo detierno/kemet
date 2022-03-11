@@ -5,8 +5,8 @@ module Kemet
   class Match
     attr_reader :current_turn, :di_deck, :turn_order, :power_tile_deck
 
-    def initialize
-      @logger = Logger.new($stdout)
+    def initialize(logger: std_logger)
+      @logger = logger
       @logger.formatter = ->(_, _, _, msg) { "#{msg}\n" }
       @events = []
     end
@@ -46,6 +46,10 @@ module Kemet
 
       def track_event(event)
         @events << event
+      end
+
+      def std_logger
+        Logger.new($stdout)
       end
   end
 end

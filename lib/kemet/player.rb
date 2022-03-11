@@ -13,7 +13,7 @@ module Kemet
     end
 
     def receive_event(event)
-      p "Event received: #{inspect} #{event.inspect}"
+      "Event received: #{inspect} #{event.inspect}"
     end
   end
 end
