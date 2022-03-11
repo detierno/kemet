@@ -3,11 +3,10 @@
 module Kemet
   # Wrapper to generate a match of Kemet board game
   class Match
-    attr_reader :current_turn, :di_deck, :turn_order, :power_tile_deck
+    attr_reader :board, :current_turn, :di_deck, :turn_order, :power_tile_deck
 
     def initialize(logger: std_logger)
       @logger = logger
-      @logger.formatter = ->(_, _, _, msg) { "#{msg}\n" }
       @events = []
     end
 
@@ -22,6 +21,7 @@ module Kemet
     end
 
     def setup!
+      @board = Board.new(players)
       @di_deck = Decks::DivineIntervention.new
       @power_tile_deck = Decks::PowerTile.new
       @turn_order = players.shuffle!
@@ -49,7 +49,9 @@ module Kemet
       end
 
       def std_logger
-        Logger.new($stdout)
+        Logger.new($stdout).tap do |logger|
+          logger.formatter = ->(_, _, _, msg) { "#{msg}\n" }
+        end
       end
   end
 end
