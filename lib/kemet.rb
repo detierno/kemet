@@ -9,4 +9,5 @@ loader.setup
 module Kemet
   class Error < StandardError; end
   class AlreadyChosenColorError < StandardError; end
+  class ActionInProgressError < StandardError; end
 end

@@ -11,7 +11,9 @@ describe Kemet do
 
       match.setup!
 
-      match.waiting_action? #=> true
+      match.waiting_action?
+
+      match.next_action!
 
       # match.next_action! #=> Action(type: AddPyramid, player: :green, targets: [Area1, Area2, Area3])
 

@@ -28,5 +28,23 @@ module Kemet
       # assert_equal 35, @match.di_deck.size # real size
       assert_equal 6, @match.di_deck.size
     end
+
+    class NextActionTest < Minitest::Test
+      def setup
+        stack = %w[Action1 Action2]
+        stack.define_singleton_method(:pop!) { pop }
+
+        @match = Kemet::Match.new(logger: Logger.new(nil))
+        @match.instance_variable_set(:"@stack", stack)
+      end
+
+      def test_dont_pull_new_action_over_open_one
+        assert_nil @match.current_action
+        @match.next_action!
+        assert_equal "Action2", @match.current_action
+
+        assert_raises(ActionInProgressError) { @match.next_action! }
+      end
+    end
   end
 end
