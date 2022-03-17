@@ -9,7 +9,7 @@ module Kemet
       @logger = logger
       @events = []
       @current_action = nil
-      @players ||= []
+      @players = []
       @stack = Stack.new
       @di_deck = Decks::DivineIntervention.new
       @power_tile_deck = Decks::PowerTile.new
