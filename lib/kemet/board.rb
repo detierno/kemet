@@ -41,6 +41,7 @@ module Kemet
       def setup
         setup_areas
         link_board
+        set_cities
       end
 
       def setup_areas
@@ -48,6 +49,19 @@ module Kemet
           area = build_area(entry)
           areas.add(area)
         end
+      end
+
+      def set_cities
+        players.each do |player|
+          areas = city_areas(player)
+          player.city = Areas::City.new(player, areas)
+        end
+      end
+
+      def city_areas(player)
+        first_available = areas.detect { |a| a.is_a?(Areas::District) && a.owner.nil? }
+        districts = first_available.connections.select { |a| a.is_a?(Areas::District) } << first_available
+        districts.each { |district| district.owner = player }
       end
 
       def template

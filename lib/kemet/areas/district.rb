@@ -3,6 +3,8 @@
 module Kemet
   module Areas
     class District < Area # :nodoc:
+      attr_accessor :owner
+
       def allow_piramid?
         true
       end

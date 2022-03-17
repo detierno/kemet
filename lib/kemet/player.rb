@@ -3,6 +3,7 @@
 module Kemet
   # Player represents a contestant for a match
   class Player
+    attr_accessor :city
     attr_reader :battle_cards_deck, :color, :player_board, :prayer_points
 
     def initialize(color)
@@ -13,7 +14,7 @@ module Kemet
     end
 
     def receive_event(event)
-      "Event received: #{inspect} #{event.inspect}"
+      # "Event received: #{inspect} #{event.inspect}"
     end
   end
 end

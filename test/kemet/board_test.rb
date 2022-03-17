@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require "ostruct"
 require "test_helper"
 
 module Kemet
+  MockPlayer = OpenStruct
+
   EXPECTED_CONNECTIONS = {
     d1: %i[d2 d3 t1],
     d2: %i[d1 d3 t1],
@@ -20,7 +23,10 @@ module Kemet
 
   describe Board do
     before do
-      @areas = Board.new([mock("Player1"), mock("Player2")]).areas
+      @player1 = MockPlayer.new
+      @player2 = MockPlayer.new
+      @board = Board.new([@player1, @player2])
+      @areas = @board.areas
     end
 
     describe "for two players" do
@@ -31,6 +37,19 @@ module Kemet
       it "set 6 districts" do
         districts = @areas.select { |a| a.is_a?(Areas::District) }
         _(districts.size).must_equal 6
+      end
+
+      it "set player 1 to one city" do
+        refute_nil @player1.city
+      end
+
+      it "set player 2 to one city" do
+        refute_nil @player2.city
+      end
+
+      it "set different areas for each district" do
+        common_areas = @player1.city.districts & @player2.city.districts
+        assert_empty common_areas
       end
 
       it "set 4 deserts" do

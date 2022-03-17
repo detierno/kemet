@@ -1,8 +1,7 @@
 # Kemet
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/kemet`. To experiment with that code, run `bin/console` for an interactive prompt.
+Ruby implementation of Kemet board game
 
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
@@ -22,7 +21,42 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Run `bin/console`
+
+```ruby
+    match = Kemet::Match.new
+    black_player = match.add_player(:black)
+    green_player = match.add_player(:green)
+
+    match.setup!
+
+    match.waiting_player_action? #=> true
+
+    match.next_action #=> Action(type: AddPyramid, player: :green, targets: [Area1, Area2, Area3])
+
+    green_player.action(AddPyramid.new(:ruby, level: 1, target: Area1))
+
+    match.current_action_fullfiled? #=> false
+
+    green_player.action(AddPyramid.new(:diamond, level: 2, target: Area2))
+
+    match.current_action_fullfiled? #=> true
+
+    match.next_action #=> Action(type: AddPyramid, player: :black, targets: [Area6, Area7, Area8])
+
+    black_player.action(AddPyramid.new(:diamond, level: 1, target: Area6))
+    black_player.action(AddPyramid.new(:diamond, level: 1, target: Area7))
+    black_player.action(AddPyramid.new(:diamond, level: 1, target: Area8))
+
+    match.next_action #=> nil
+
+    match.start! # ???
+
+    match.next_action #=> Action(type: PlayerAction, player: :green, targets: [])
+
+    green_player.action(Pray)
+```
+
 
 ## Development
 
@@ -32,7 +66,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/kemet.
+Bug reports and pull requests are welcome on GitHub at https://github.com/detierno/kemet.
 
 ## License
 

@@ -231,7 +231,7 @@ Style/TrivialAccessors:
   Enabled: true
 
 Metrics/BlockLength:
-  IgnoredMethods: ['describe']
+  IgnoredMethods: ['describe', 'context']
 
 Minitest/UnreachableAssertion:
   Enabled: true
