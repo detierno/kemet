@@ -14,6 +14,7 @@ gem "zeitwerk"
 
 group :development do
   gem "color_pound_spec_reporter"
+  gem "debug"
   gem "guard"
   gem "guard-minitest"
   gem "minitest-reporters"

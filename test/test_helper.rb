@@ -3,6 +3,7 @@
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 require "kemet"
 
+require "debug"
 require "minitest/autorun"
 require "color_pound_spec_reporter"
 

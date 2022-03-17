@@ -3,12 +3,15 @@
 module Kemet
   # Wrapper to generate a match of Kemet board game
   class Match
-    attr_reader :board, :current_turn, :di_deck, :turn_order, :power_tile_deck, :stack
+    attr_reader :board, :current_turn, :di_deck, :turn_order, :players, :power_tile_deck, :stack
 
     def initialize(logger: std_logger)
       @logger = logger
       @events = []
+      @players ||= []
       @stack = Stack.new
+      @di_deck = Decks::DivineIntervention.new
+      @power_tile_deck = Decks::PowerTile.new
     end
 
     def add_player(color)
@@ -27,15 +30,9 @@ module Kemet
 
     def setup!
       @board = Board.new(players)
-      @di_deck = Decks::DivineIntervention.new
-      @power_tile_deck = Decks::PowerTile.new
       @turn_order = players.shuffle!
 
       notify!(Events::MatchSetupCompleted.new(self))
-    end
-
-    def players
-      @players ||= []
     end
 
     def waiting_action?

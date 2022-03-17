@@ -3,14 +3,13 @@
 module Kemet
   # Individual board with player actions
   class PlayerBoard
+    attr_reader :actions
+
     Action = Struct.new(:action, :level)
 
     def initialize
+      @actions = []
       init_basic_actions
-    end
-
-    def actions
-      @actions ||= []
     end
 
     def add_action(action, level)
