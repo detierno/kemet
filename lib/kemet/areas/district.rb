@@ -3,7 +3,7 @@
 module Kemet
   module Areas
     class District < Area # :nodoc:
-      attr_accessor :owner
+      attr_accessor :owner, :pyramid
 
       def allow_piramid?
         true

@@ -6,7 +6,7 @@ module Kemet
   describe Player do
     describe "#initialize" do
       before do
-        @player = Player.new(:red)
+        @player = Player.new(:red, mock("Match"))
       end
 
       it "set the player color" do
@@ -15,7 +15,7 @@ module Kemet
 
       it "initialize a Decks::BattleCard" do
         Decks::BattleCard.expects(:new).once
-        Player.new(:red)
+        Player.new(:red, mock("Match"))
       end
 
       it "set to @battle_cards_deck variable" do
@@ -24,7 +24,7 @@ module Kemet
 
       it "initialize a PlayerBoard" do
         PlayerBoard.expects(:new).once
-        Player.new(:red)
+        Player.new(:red, mock("Match"))
       end
 
       it "set to @player_board variable" do

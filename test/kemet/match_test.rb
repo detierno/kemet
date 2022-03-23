@@ -39,8 +39,9 @@ module Kemet
       end
 
       def test_dont_pull_new_action_over_open_one
-        assert_nil @match.current_action
+        refute @match.action_in_progress?
         @match.next_action!
+        assert @match.action_in_progress?
         assert_equal "Action2", @match.current_action
 
         assert_raises(ActionInProgressError) { @match.next_action! }

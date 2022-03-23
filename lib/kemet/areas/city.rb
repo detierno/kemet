@@ -11,6 +11,10 @@ module Kemet
         @owner = owner
         @districts = districts
       end
+
+      def district_ids
+        districts.map(&:id)
+      end
     end
   end
 end

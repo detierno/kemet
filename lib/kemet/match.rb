@@ -3,7 +3,7 @@
 module Kemet
   # Wrapper to generate a match of Kemet board game
   class Match
-    attr_reader :board, :current_action, :current_turn, :di_deck, :turn_order, :players, :power_tile_deck, :stack
+    attr_reader :board, :current_turn, :di_deck, :turn_order, :players, :power_tile_deck, :stack
 
     def initialize(logger: std_logger)
       @logger = logger
@@ -15,11 +15,23 @@ module Kemet
       @power_tile_deck = Decks::PowerTile.new
     end
 
+    # Probably this is useless and conflicts with
+    # waiting_action? method
+    def action_in_progress?
+      !!@current_action
+    end
+
     def add_player(color)
       raise(AlreadyChosenColorError) if players.any? { |player| player.color == color }
 
-      players << Player.new(color)
+      Player.new(color, self).tap { |player| players << player }
     end
+
+    # Interface to what players should do
+    #
+    # @return <String>
+    #
+    attr_reader :current_action
 
     def next_action!
       raise(ActionInProgressError) if current_action
@@ -29,6 +41,10 @@ module Kemet
 
     def start!
       @current_turn = Turn.new(match: self)
+    end
+
+    def interaction(player, opts = {})
+      @current_action.interact(self, player, opts)
     end
 
     def setup!
