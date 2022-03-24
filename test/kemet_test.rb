@@ -6,15 +6,11 @@ module Kemet
   describe Kemet do
     describe "a 2 player full match" do
       it "works" do
-        match = Match.new(logger: Logger.new(nil))
+        match = Match.new(listener: Proc.new {})
         _black_player = match.add_player(:black)
         green_player = match.add_player(:green)
 
         match.setup!
-
-        match.waiting_action?
-
-        match.next_action!
 
         match.current_action
 
