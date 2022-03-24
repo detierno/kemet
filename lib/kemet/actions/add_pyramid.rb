@@ -5,6 +5,7 @@ module Kemet
     class AddPyramid # :nodoc:
       def initialize(player)
         @player = player
+        @accumulated_level = 0
       end
 
       def targets
@@ -14,10 +15,16 @@ module Kemet
       def interact(match, _player, options)
         district = match.board.areas.find { |a| a.id == options[:target] }
         district.pyramid = options[:pyramid]
+
+        @accumulated_level += options[:pyramid].level
       end
 
-      def inspect
-        "Actions::AddPyramid.#{@player.inspect} targets: #{targets}"
+      def satisfied?
+        @accumulated_level >= 3
+      end
+
+      def to_event
+        { type: :action, name: "AddPyramid", player: @player.color, targets: targets }
       end
     end
   end

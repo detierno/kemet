@@ -5,7 +5,7 @@ require "test_helper"
 module Kemet
   class MatchTest < Minitest::Test
     def setup
-      @match = Kemet::Match.new(listener: Proc.new {})
+      @match = Kemet::Match.new(listener: proc { })
     end
 
     def test_add_player
@@ -20,10 +20,10 @@ module Kemet
       assert_raises(AlreadyChosenColorError) { @match.add_player(:red) }
     end
 
-    def test_setup_generate_di_deck
+    def test_start_generate_di_deck
       @match.add_player(:red)
       @match.add_player(:blue)
-      @match.setup!
+      @match.start!
 
       # assert_equal 35, @match.di_deck.size # real size
       assert_equal 6, @match.di_deck.size

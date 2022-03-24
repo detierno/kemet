@@ -6,35 +6,24 @@ module Kemet
   describe Kemet do
     describe "a 2 player full match" do
       it "works" do
-        match = Match.new(listener: Proc.new {})
-        _black_player = match.add_player(:black)
+        @events = []
+        @listener = proc { |event| p event; @events << event }
+
+        match = Match.new(listener: @listener)
+        black_player = match.add_player(:black)
         green_player = match.add_player(:green)
 
-        match.setup!
+        match.start!
 
-        match.current_action
+        # p match.current_action
 
         green_player.add_pyramid(Pyramids::Ruby.new(1), target: :d1)
-
         green_player.add_pyramid(Pyramids::Diamond.new(2), target: :d2)
 
-        # match.next_action! #=> Action(type: AddPyramid, player: :green, targets: [Area1, Area2, Area3])
+        black_player.add_pyramid(Pyramids::Ruby.new(3), target: :d5)
 
-        # match.current_action_fullfiled? #=> false
-
-        # green_player.action(AddPyramid.new(:diamond, level: 2, target: Area2))
-
-        # match.current_action_fullfiled? #=> true
-
-        # match.next_action #=> Action(type: AddPyramid, player: :black, targets: [Area6, Area7, Area8])
-
-        # black_player.action(AddPyramid.new(:diamond, level: 1, target: Area6))
-        # black_player.action(AddPyramid.new(:diamond, level: 1, target: Area7))
-        # black_player.action(AddPyramid.new(:diamond, level: 1, target: Area8))
-
-        # match.next_action #=> nil
-
-        # match.start! # ???
+        event_types = @events.map { |e| e[:type] }
+        assert_equal %i[action action event], event_types
 
         # match.next_action #=> Action(type: PlayerAction, player: :green, targets: [])
 

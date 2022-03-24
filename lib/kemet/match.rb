@@ -15,6 +15,11 @@ module Kemet
       @power_tile_deck = Decks::PowerTile.new
     end
 
+    def add_to_stack(action)
+      stack.add(action)
+      notify!(action)
+    end
+
     def add_player(color)
       raise(AlreadyChosenColorError) if players.any? { |player| player.color == color }
 
@@ -22,18 +27,12 @@ module Kemet
     end
 
     def start!
+      setup!
       @current_turn = Turn.new(match: self)
     end
 
     def interaction(player, opts = {})
       @current_action.interact(self, player, opts)
-    end
-
-    def setup!
-      @board = Board.new(players)
-      @turn_order = players.shuffle!
-
-      notify!(Events::MatchSetupCompleted.new(self))
       next_action!
     end
 
@@ -41,7 +40,7 @@ module Kemet
       attr_reader :listener
 
       def next_action!
-        raise(ActionInProgressError) if current_action
+        return if @current_action && !@current_action.satisfied?
 
         @current_action = stack.pop!
       end
@@ -49,12 +48,16 @@ module Kemet
       def notify!(*events)
         events.each do |event|
           track_event(event)
-          listener.call "Event: #{event.inspect}"
+          listener.call(event.to_event)
         end
       end
 
-      def track_event(event)
-        @events << event
+      def setup!
+        @board = Board.new(players)
+        @turn_order = players.shuffle!
+
+        notify!(Events::MatchSetupCompleted.new(self))
+        next_action!
       end
 
       def std_listener
@@ -62,6 +65,10 @@ module Kemet
           listener.define_singleton_method(:call) { |msg| debug(msg) }
           listener.formatter = ->(_, _, _, msg) { "#{msg}\n" }
         end
+      end
+
+      def track_event(event)
+        @events << event
       end
   end
 end
