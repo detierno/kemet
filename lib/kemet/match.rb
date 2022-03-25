@@ -78,7 +78,7 @@ module Kemet
 
       def notify!(type, *events)
         events.each do |event|
-          msg = { type: type, event: event.to_event, source: event }
+          msg = { type: type, event: event.to_event, properties: event.properties }
 
           track_event(msg)
           listener.call(msg)
