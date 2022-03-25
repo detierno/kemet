@@ -26,6 +26,10 @@ module Kemet
       Player.new(color, self).tap { |player| players << player }
     end
 
+    def current_action_properties
+      current_action.to_event
+    end
+
     def start!
       setup!
       @current_turn = Turn.new(match: self)

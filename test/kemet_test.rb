@@ -7,7 +7,7 @@ module Kemet
     describe "a 2 player full match" do
       it "works" do
         @events = []
-        @listener = proc { |event| p event; @events << event }
+        @listener = proc { |event| @events << event }
 
         match = Match.new(listener: @listener)
         black_player = match.add_player(:black)
@@ -15,13 +15,15 @@ module Kemet
 
         match.start!
 
-        # p match.current_action
+        d1, d2 = match.current_action_properties[:targets]
 
-        green_player.add_pyramid(Pyramids::Ruby.new(1), target: :d1)
-        green_player.add_pyramid(Pyramids::Diamond.new(2), target: :d2)
+        green_player.add_pyramid(Pyramids::Ruby.new(1), target: d1)
+        green_player.add_pyramid(Pyramids::Diamond.new(2), target: d2)
 
-        black_player.add_pyramid(Pyramids::Ruby.new(3), target: :d5)
+        district = match.current_action_properties[:targets].first
+        black_player.add_pyramid(Pyramids::Ruby.new(3), target: district)
 
+        # Events are not in the right order
         event_types = @events.map { |e| e[:type] }
         assert_equal %i[action action event], event_types
 
