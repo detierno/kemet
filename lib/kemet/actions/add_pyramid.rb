@@ -27,8 +27,12 @@ module Kemet
         @accumulated_level >= 3
       end
 
-      def to_event
+      def properties
         { name: name, player: @player.color, targets: targets }
+      end
+
+      def to_event
+        "#{name} - Player: #{@player.color} - targets: #{targets.join(", ")}"
       end
     end
   end

@@ -3,33 +3,47 @@
 require "test_helper"
 
 module Kemet
-  describe Player do
-    describe "#initialize" do
-      before do
+  class PlayerTest < Minitest::Test
+    class InitializePlayerTest < PlayerTest
+      def setup
         @player = Player.new(:red, mock("Match"))
       end
 
-      it "set the player color" do
+      def test_set_player_color
         assert_equal :red, @player.color
       end
 
-      it "initialize a Decks::BattleCard" do
+      def test_set_player_battle_card_deck
         Decks::BattleCard.expects(:new).once
         Player.new(:red, mock("Match"))
       end
 
-      it "set to @battle_cards_deck variable" do
+      def test_set_battle_card_deck
         refute_nil @player.battle_cards_deck
       end
 
-      it "initialize a PlayerBoard" do
+      def test_set_player_board
         PlayerBoard.expects(:new).once
         Player.new(:red, mock("Match"))
       end
 
-      it "set to @player_board variable" do
+      def test_player_board_variable
         refute_nil @player.player_board
       end
+    end
+  end
+
+  class AddPyramidTest < PlayerTest
+    def test_add_pyramid_calls_match_interaction
+      match = mock("Match")
+      player = Player.new(:red, match)
+
+      match
+        .expects(:interaction)
+        .with(player, pyramid: "Pyramid", target: "target")
+        .once
+
+      player.add_pyramid("Pyramid", target: "target")
     end
   end
 end

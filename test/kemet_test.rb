@@ -7,36 +7,37 @@ module Kemet
     describe "a 2 player full match" do
       it "works" do
         @events = []
-        @listener = proc { |event| @events << event }
+        @listener = proc { |e| @events << "#{e[:type]}: #{e[:event]}" }
 
         match = Match.new(listener: @listener)
         black_player = match.add_player(:black)
         green_player = match.add_player(:green)
 
+        match.players.expects(:shuffle!).returns([black_player, green_player])
+
         match.start!
+
+        district = match.current_action_properties[:targets].first
+        black_player.add_pyramid(Pyramids::Ruby.new(3), target: district)
 
         d1, d2 = match.current_action_properties[:targets]
 
         green_player.add_pyramid(Pyramids::Ruby.new(1), target: d1)
         green_player.add_pyramid(Pyramids::Diamond.new(2), target: d2)
 
-        district = match.current_action_properties[:targets].first
-        black_player.add_pyramid(Pyramids::Ruby.new(3), target: district)
-
-        events = @events.map { |e| e[:event] }
-        assert_equal expected_events, events
+        assert_equal expected_events, @events
       end
 
       def expected_events
         [
-          "stack_added: AddPyramid",
-          "stack_added: AddPyramid",
+          "stack_added: AddPyramid - Player: black - targets: d2, d3, d1",
+          "stack_added: AddPyramid - Player: green - targets: d5, d6, d4",
           "event: Match setup completed",
-          "current_action_changed: AddPyramid",
-          "action_performed: AddPyramid",
-          "action_performed: AddPyramid",
-          "current_action_changed: AddPyramid",
-          "action_performed: AddPyramid"
+          "current_action_changed: AddPyramid - Player: black - targets: d2, d3, d1",
+          "action_performed: AddPyramid - Player: black - targets: d2, d3, d1",
+          "current_action_changed: AddPyramid - Player: green - targets: d5, d6, d4",
+          "action_performed: AddPyramid - Player: green - targets: d5, d6, d4",
+          "action_performed: AddPyramid - Player: green - targets: d5, d6, d4"
         ]
       end
     end

@@ -3,19 +3,19 @@
 module Kemet
   class Stack # :nodoc:
     def initialize
-      @events = []
+      @queue = []
     end
 
     def add(event)
-      @events.push(event)
+      @queue.push(event)
     end
 
     def any?
-      @events.any?
+      @queue.any?
     end
 
     def pop!
-      @events.pop
+      @queue.shift
     end
   end
 end

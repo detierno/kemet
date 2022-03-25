@@ -15,30 +15,55 @@ module Kemet
       @power_tile_deck = Decks::PowerTile.new
     end
 
+    # Interface for events and actions
+    # for adding new entries to match stack
+    #
+    # @param action [Event,Action]
+    #
     def add_to_stack(action)
       stack.add(action)
       notify!(:stack_added, action)
     end
 
+    # Add a player to current match
+    #
+    # @param color <Symbol> a color to identify a player
+    # @return [Player]
+    #
     def add_player(color)
       raise(AlreadyChosenColorError) if players.any? { |player| player.color == color }
 
       Player.new(color, self).tap { |player| players << player }
     end
 
+    # Return current action properties hash. This
+    # hash can be used by the listener to drive player actions
+    #
+    # @return [Hash<Symbol=>Any]
+    #
     def current_action_properties
-      current_action.to_event
+      current_action.properties
     end
 
-    def start!
-      setup!
-      @current_turn = Turn.new(match: self)
-    end
-
+    # Access point for players interaction with
+    # current action, like player.add_pyramid({}). This
+    # allows players to be unaware of current action at all.
+    #
+    # After an interaction take place this method will
+    # try to move to next action in stack.
+    #
     def interaction(player, opts = {})
       @current_action.interact(self, player, opts)
       notify!(:action_performed, @current_action)
       next_action!
+    end
+
+    # Initiate a match, setting player areas
+    # and initializing first turn
+    #
+    def start!
+      setup!
+      @current_turn = Turn.new(match: self)
     end
 
     private
@@ -53,8 +78,7 @@ module Kemet
 
       def notify!(type, *events)
         events.each do |event|
-          msg =  event.to_event.merge!({ type: type })
-          msg[:event] = "#{msg[:type]}: #{msg[:name]}"
+          msg = { type: type, event: event.to_event, source: event }
 
           track_event(msg)
           listener.call(msg)
