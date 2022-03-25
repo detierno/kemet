@@ -17,7 +17,7 @@ module Kemet
 
     def add_to_stack(action)
       stack.add(action)
-      notify!(action)
+      notify!(:stack_added, action)
     end
 
     def add_player(color)
@@ -37,6 +37,7 @@ module Kemet
 
     def interaction(player, opts = {})
       @current_action.interact(self, player, opts)
+      notify!(:action_performed, @current_action)
       next_action!
     end
 
@@ -47,12 +48,16 @@ module Kemet
         return if @current_action && !@current_action.satisfied?
 
         @current_action = stack.pop!
+        notify!(:current_action_changed, @current_action) if @current_action
       end
 
-      def notify!(*events)
+      def notify!(type, *events)
         events.each do |event|
-          track_event(event)
-          listener.call(event.to_event)
+          msg =  event.to_event.merge!({ type: type })
+          msg[:event] = "#{msg[:type]}: #{msg[:name]}"
+
+          track_event(msg)
+          listener.call(msg)
         end
       end
 
@@ -60,7 +65,7 @@ module Kemet
         @board = Board.new(players)
         @turn_order = players.shuffle!
 
-        notify!(Events::MatchSetupCompleted.new(self))
+        notify!(:event, Events::MatchSetupCompleted.new(self))
         next_action!
       end
 

@@ -23,13 +23,21 @@ module Kemet
         district = match.current_action_properties[:targets].first
         black_player.add_pyramid(Pyramids::Ruby.new(3), target: district)
 
-        # Events are not in the right order
-        event_types = @events.map { |e| e[:type] }
-        assert_equal %i[action action event], event_types
+        events = @events.map { |e| e[:event] }
+        assert_equal expected_events, events
+      end
 
-        # match.next_action #=> Action(type: PlayerAction, player: :green, targets: [])
-
-        # green_player.action(Pray)
+      def expected_events
+        [
+          "stack_added: AddPyramid",
+          "stack_added: AddPyramid",
+          "event: Match setup completed",
+          "current_action_changed: AddPyramid",
+          "action_performed: AddPyramid",
+          "action_performed: AddPyramid",
+          "current_action_changed: AddPyramid",
+          "action_performed: AddPyramid"
+        ]
       end
     end
   end

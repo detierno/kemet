@@ -19,12 +19,16 @@ module Kemet
         @accumulated_level += options[:pyramid].level
       end
 
+      def name
+        "AddPyramid"
+      end
+
       def satisfied?
         @accumulated_level >= 3
       end
 
       def to_event
-        { type: :action, name: "AddPyramid", player: @player.color, targets: targets }
+        { name: name, player: @player.color, targets: targets }
       end
     end
   end

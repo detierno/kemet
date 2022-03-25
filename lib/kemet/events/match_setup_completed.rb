@@ -7,8 +7,12 @@ module Kemet
         match.players.each { |player| match.add_to_stack(Actions::AddPyramid.new(player)) }
       end
 
+      def name
+        "Match setup completed"
+      end
+
       def to_event
-        { type: :event, name: self.class.to_s }
+        { name: name }
       end
     end
   end
