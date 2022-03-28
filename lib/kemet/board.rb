@@ -17,6 +17,10 @@ module Kemet
       @areas ||= Set.new
     end
 
+    def inspect
+      "Board"
+    end
+
     private
       def build_area(entry)
         case entry["type"]

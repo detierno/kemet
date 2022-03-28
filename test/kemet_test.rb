@@ -6,43 +6,39 @@ module Kemet
   describe Kemet do
     describe "a 2 player full match" do
       it "works" do
-        match = Match.new(logger: Logger.new(nil))
-        _black_player = match.add_player(:black)
+        @events = []
+        @listener = proc { |e| @events << "#{e[:type]}: #{e[:event]}" }
+
+        match = Match.new(listener: @listener)
+        black_player = match.add_player(:black)
         green_player = match.add_player(:green)
 
-        match.setup!
+        match.players.expects(:shuffle!).returns([black_player, green_player])
 
-        match.waiting_action?
+        match.start!
 
-        match.next_action!
+        district = match.current_action_properties[:targets].first
+        black_player.add_pyramid(Pyramids::Ruby.new(3), target: district)
 
-        match.current_action
+        d1, d2 = match.current_action_properties[:targets]
 
-        green_player.add_pyramid(Pyramids::Ruby.new(1), target: :d1)
+        green_player.add_pyramid(Pyramids::Ruby.new(1), target: d1)
+        green_player.add_pyramid(Pyramids::Diamond.new(2), target: d2)
 
-        green_player.add_pyramid(Pyramids::Diamond.new(2), target: :d2)
+        assert_equal expected_events, @events
+      end
 
-        # match.next_action! #=> Action(type: AddPyramid, player: :green, targets: [Area1, Area2, Area3])
-
-        # match.current_action_fullfiled? #=> false
-
-        # green_player.action(AddPyramid.new(:diamond, level: 2, target: Area2))
-
-        # match.current_action_fullfiled? #=> true
-
-        # match.next_action #=> Action(type: AddPyramid, player: :black, targets: [Area6, Area7, Area8])
-
-        # black_player.action(AddPyramid.new(:diamond, level: 1, target: Area6))
-        # black_player.action(AddPyramid.new(:diamond, level: 1, target: Area7))
-        # black_player.action(AddPyramid.new(:diamond, level: 1, target: Area8))
-
-        # match.next_action #=> nil
-
-        # match.start! # ???
-
-        # match.next_action #=> Action(type: PlayerAction, player: :green, targets: [])
-
-        # green_player.action(Pray)
+      def expected_events
+        [
+          "stack_added: AddPyramid - Player: black - targets: d2, d3, d1",
+          "stack_added: AddPyramid - Player: green - targets: d5, d6, d4",
+          "event: Match setup completed",
+          "current_action_changed: AddPyramid - Player: black - targets: d2, d3, d1",
+          "action_performed: AddPyramid - Player: black - targets: d2, d3, d1",
+          "current_action_changed: AddPyramid - Player: green - targets: d5, d6, d4",
+          "action_performed: AddPyramid - Player: green - targets: d5, d6, d4",
+          "action_performed: AddPyramid - Player: green - targets: d5, d6, d4"
+        ]
       end
     end
   end

@@ -32,29 +32,13 @@ Run `bin/console`
 
     match.waiting_player_action? #=> true
 
-    match.next_action #=> Action(type: AddPyramid, player: :green, targets: [Area1, Area2, Area3])
+    match.next_action
 
-    green_player.action(AddPyramid.new(:ruby, level: 1, target: Area1))
+    match.current_action
 
-    match.current_action_fullfiled? #=> false
+    green_player.add_pyramid(Pyramids::Ruby.new(1), target: :d1)
 
-    green_player.action(AddPyramid.new(:diamond, level: 2, target: Area2))
-
-    match.current_action_fullfiled? #=> true
-
-    match.next_action #=> Action(type: AddPyramid, player: :black, targets: [Area6, Area7, Area8])
-
-    black_player.action(AddPyramid.new(:diamond, level: 1, target: Area6))
-    black_player.action(AddPyramid.new(:diamond, level: 1, target: Area7))
-    black_player.action(AddPyramid.new(:diamond, level: 1, target: Area8))
-
-    match.next_action #=> nil
-
-    match.start! # ???
-
-    match.next_action #=> Action(type: PlayerAction, player: :green, targets: [])
-
-    green_player.action(Pray)
+    green_player.add_pyramid(Pyramids::Diamond.new(2), target: :d2)
 ```
 
 

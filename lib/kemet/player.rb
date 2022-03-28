@@ -17,13 +17,5 @@ module Kemet
     def add_pyramid(pyramid, target:)
       match.interaction(self, pyramid: pyramid, target: target)
     end
-
-    def inspect
-      "<#{color} player>"
-    end
-
-    def receive_event(event)
-      # "Event received: #{inspect} #{event.inspect}"
-    end
   end
 end
