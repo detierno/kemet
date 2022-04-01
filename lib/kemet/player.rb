@@ -17,5 +17,10 @@ module Kemet
     def add_pyramid(pyramid, target:)
       match.interaction(self, pyramid: pyramid, target: target)
     end
+
+    def place_troop(size:, target:)
+      troop = Troop.new(self, size)
+      match.interaction(self, troop: troop, target: target)
+    end
   end
 end
