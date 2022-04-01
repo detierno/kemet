@@ -20,26 +20,60 @@ module Kemet
         district = match.current_action_properties[:targets].first
         black_player.add_pyramid(Pyramids::Ruby.new(3), target: district)
 
+        properties = match.current_action_properties
+
+        black_player
+          .place_troop(size: properties[:troop_size], target: properties[:targets].first)
+
+        black_player
+          .place_troop(size: properties[:troop_size], target: properties[:targets].last)
+
         d1, d2 = match.current_action_properties[:targets]
 
         green_player.add_pyramid(Pyramids::Ruby.new(1), target: d1)
         green_player.add_pyramid(Pyramids::Diamond.new(2), target: d2)
 
+        properties = match.current_action_properties
+
+        green_player
+          .place_troop(size: properties[:troop_size], target: properties[:targets].first)
+
+        green_player
+          .place_troop(size: properties[:troop_size], target: properties[:targets].last)
+
         assert_equal expected_events, @events
       end
 
-      def expected_events
+      # rubocop:disable Metrics/MethodLength
+      def expected_events # :nodoc:
         [
           "stack_added: AddPyramid - Player: black - targets: d2, d3, d1",
+          "stack_added: PlaceTroop - Player: black - targets: d2, d3, d1 - troop_size: 5",
+          "stack_added: PlaceTroop - Player: black - targets: d2, d3, d1 - troop_size: 5",
+          # "event: DI card received - Player: black",
+          # "event: DI card received - Player: black",
           "stack_added: AddPyramid - Player: green - targets: d5, d6, d4",
+          "stack_added: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5",
+          "stack_added: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5",
+          # "event: DI card received - Player: green",
+          # "event: DI card received - Player: green",
           "event: Match setup completed",
           "current_action_changed: AddPyramid - Player: black - targets: d2, d3, d1",
           "action_performed: AddPyramid - Player: black - targets: d2, d3, d1",
+          "current_action_changed: PlaceTroop - Player: black - targets: d2, d3, d1 - troop_size: 5",
+          "action_performed: PlaceTroop - Player: black - targets: d2, d3, d1 - troop_size: 5",
+          "current_action_changed: PlaceTroop - Player: black - targets: d2, d3, d1 - troop_size: 5",
+          "action_performed: PlaceTroop - Player: black - targets: d2, d3, d1 - troop_size: 5",
           "current_action_changed: AddPyramid - Player: green - targets: d5, d6, d4",
           "action_performed: AddPyramid - Player: green - targets: d5, d6, d4",
-          "action_performed: AddPyramid - Player: green - targets: d5, d6, d4"
+          "action_performed: AddPyramid - Player: green - targets: d5, d6, d4",
+          "current_action_changed: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5",
+          "action_performed: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5",
+          "current_action_changed: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5",
+          "action_performed: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5"
         ]
       end
+      # rubocop:enable Metrics/MethodLength
     end
   end
 end

@@ -4,6 +4,7 @@ module Kemet
   # Represents an area in the board
   class Area
     attr_reader :id
+    attr_accessor :troop
 
     def initialize(id)
       @id = id
