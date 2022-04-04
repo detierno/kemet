@@ -45,6 +45,24 @@ module Kemet
       current_action.properties
     end
 
+    # Draw card from divine intervention deck
+    #
+    # @return DivineIntervention::Card
+    #
+    def draw_di_card
+      di_deck.draw
+    end
+
+    # Trigger an event unrelated to stack or player
+    # interaction
+    #
+    # @param event <Event>
+    #
+    def event(event)
+      event.call
+      notify!(:event, event)
+    end
+
     # Access point for players interaction with
     # current action, like player.add_pyramid({}). This
     # allows players to be unaware of current action at all.

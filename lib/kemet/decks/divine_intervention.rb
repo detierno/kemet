@@ -15,6 +15,10 @@ module Kemet
         @cards = load_cards
       end
 
+      def draw
+        cards.pop
+      end
+
       private
         def load_cards
           card_list.each_with_object([]) do |card, ary|
