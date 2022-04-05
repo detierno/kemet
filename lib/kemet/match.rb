@@ -3,12 +3,13 @@
 module Kemet
   # Wrapper to generate a match of Kemet board game
   class Match
-    attr_reader :board, :current_action, :current_turn, :di_deck, :turn_order, :players, :power_tile_deck, :stack
+    attr_reader :board, :current_action, :current_round, :di_deck, :turn_order, :players, :power_tile_deck, :stack
 
     def initialize(listener: std_listener)
       @listener = listener
       @events = []
       @current_action = nil
+      @current_round_count = 0
       @players = []
       @stack = Stack.new
       @di_deck = Decks::DivineIntervention.new
@@ -77,11 +78,11 @@ module Kemet
     end
 
     # Initiate a match, setting player areas
-    # and initializing first turn
+    # and initializing first round
     #
     def start!
       setup!
-      @current_turn = Turn.new(match: self)
+      next_round
     end
 
     private
@@ -92,6 +93,13 @@ module Kemet
 
         @current_action = stack.pop!
         notify!(:current_action_changed, @current_action) if @current_action
+      end
+
+      def next_round
+        @current_round_count += 1
+        event = Events::NewRound.new(self)
+        notify!(:event, event)
+        @current_round = event.round
       end
 
       def notify!(type, *events)
