@@ -3,7 +3,7 @@
 module Kemet
   class Match
     # Represent a turn in the game
-    class Turn
+    class Round
       def initialize(match:)
         @match = match
       end

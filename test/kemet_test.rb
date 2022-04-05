@@ -41,6 +41,8 @@ module Kemet
         green_player
           .place_troop(size: properties[:troop_size], target: properties[:targets].last)
 
+        # black_player.available_actions #=> [<PlaceTroop: targets: [:d2, :d3, :d1]>, BuyPower, ...]
+
         assert_equal expected_events, @events
       end
 
@@ -57,6 +59,8 @@ module Kemet
           "event: DI card received - Player: green - quantity: 2",
           "event: Match setup completed",
           "current_action_changed: AddPyramid - Player: black - targets: d2, d3, d1",
+          "stack_added: PlayerAction - Player: black",
+          "event: New game round",
           "action_performed: AddPyramid - Player: black - targets: d2, d3, d1",
           "current_action_changed: PlaceTroop - Player: black - targets: d2, d3, d1 - troop_size: 5",
           "action_performed: PlaceTroop - Player: black - targets: d2, d3, d1 - troop_size: 5",
@@ -68,7 +72,8 @@ module Kemet
           "current_action_changed: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5",
           "action_performed: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5",
           "current_action_changed: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5",
-          "action_performed: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5"
+          "action_performed: PlaceTroop - Player: green - targets: d5, d6, d4 - troop_size: 5",
+          "current_action_changed: PlayerAction - Player: black"
         ]
       end
       # rubocop:enable Metrics/MethodLength
